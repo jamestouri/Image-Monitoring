@@ -15,6 +15,10 @@
 		0F38BB722026591D00FFEBD4 /* yard_companionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F38BB712026591D00FFEBD4 /* yard_companionTests.swift */; };
 		0F38BB7D2026591D00FFEBD4 /* yard_companionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F38BB7C2026591D00FFEBD4 /* yard_companionUITests.swift */; };
 		0F38BB8B20265A2300FFEBD4 /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F38BB8A20265A2300FFEBD4 /* DemoViewController.swift */; };
+		0F38BB8D20266BF400FFEBD4 /* NumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F38BB8C20266BF400FFEBD4 /* NumberViewController.swift */; };
+		0F38BB8F20266C7300FFEBD4 /* FacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F38BB8E20266C7300FFEBD4 /* FacesViewController.swift */; };
+		0F38BB93202679DB00FFEBD4 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F38BB92202679DB00FFEBD4 /* CloudKit.framework */; };
+		0FDAD44C2026CB30006854DA /* FacesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDAD44B2026CB30006854DA /* FacesCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,11 @@
 		0F38BB7C2026591D00FFEBD4 /* yard_companionUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = yard_companionUITests.swift; sourceTree = "<group>"; };
 		0F38BB7E2026591D00FFEBD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0F38BB8A20265A2300FFEBD4 /* DemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
+		0F38BB8C20266BF400FFEBD4 /* NumberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberViewController.swift; sourceTree = "<group>"; };
+		0F38BB8E20266C7300FFEBD4 /* FacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacesViewController.swift; sourceTree = "<group>"; };
+		0F38BB902026794500FFEBD4 /* yard-companion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "yard-companion.entitlements"; sourceTree = "<group>"; };
+		0F38BB92202679DB00FFEBD4 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		0FDAD44B2026CB30006854DA /* FacesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacesCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F38BB93202679DB00FFEBD4 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +93,7 @@
 				0F38BB702026591D00FFEBD4 /* yard-companionTests */,
 				0F38BB7B2026591D00FFEBD4 /* yard-companionUITests */,
 				0F38BB5A2026591D00FFEBD4 /* Products */,
+				0F38BB91202679DB00FFEBD4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,10 +110,14 @@
 		0F38BB5B2026591D00FFEBD4 /* yard-companion */ = {
 			isa = PBXGroup;
 			children = (
+				0F38BB902026794500FFEBD4 /* yard-companion.entitlements */,
 				0F38BB5C2026591D00FFEBD4 /* AppDelegate.swift */,
+				0F38BB602026591D00FFEBD4 /* Main.storyboard */,
+				0FDAD44B2026CB30006854DA /* FacesCollectionViewCell.swift */,
 				0F38BB5E2026591D00FFEBD4 /* ViewController.swift */,
 				0F38BB8A20265A2300FFEBD4 /* DemoViewController.swift */,
-				0F38BB602026591D00FFEBD4 /* Main.storyboard */,
+				0F38BB8E20266C7300FFEBD4 /* FacesViewController.swift */,
+				0F38BB8C20266BF400FFEBD4 /* NumberViewController.swift */,
 				0F38BB632026591D00FFEBD4 /* Assets.xcassets */,
 				0F38BB652026591D00FFEBD4 /* LaunchScreen.storyboard */,
 				0F38BB682026591D00FFEBD4 /* Info.plist */,
@@ -126,6 +141,14 @@
 				0F38BB7E2026591D00FFEBD4 /* Info.plist */,
 			);
 			path = "yard-companionUITests";
+			sourceTree = "<group>";
+		};
+		0F38BB91202679DB00FFEBD4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0F38BB92202679DB00FFEBD4 /* CloudKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -197,6 +220,11 @@
 					0F38BB582026591D00FFEBD4 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					0F38BB6C2026591D00FFEBD4 = {
 						CreatedOnToolsVersion = 9.2;
@@ -263,6 +291,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				0F38BB8B20265A2300FFEBD4 /* DemoViewController.swift in Sources */,
+				0FDAD44C2026CB30006854DA /* FacesCollectionViewCell.swift in Sources */,
+				0F38BB8D20266BF400FFEBD4 /* NumberViewController.swift in Sources */,
+				0F38BB8F20266C7300FFEBD4 /* FacesViewController.swift in Sources */,
 				0F38BB5F2026591D00FFEBD4 /* ViewController.swift in Sources */,
 				0F38BB5D2026591D00FFEBD4 /* AppDelegate.swift in Sources */,
 			);
@@ -430,7 +461,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "yard-companion/yard-companion.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5Q3EAA7695;
 				INFOPLIST_FILE = "yard-companion/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "james.yard-companion";
@@ -444,7 +477,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "yard-companion/yard-companion.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5Q3EAA7695;
 				INFOPLIST_FILE = "yard-companion/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "james.yard-companion";
