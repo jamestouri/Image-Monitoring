@@ -9,13 +9,25 @@
 import UIKit
 import ARKit
 import Vision
+import Foundation
 
 class MovingViewController: UIViewController {
 
     @IBOutlet weak var contentView: ARSCNView!
-    private var scannedFaceViews = [UIView]()
-    var theImage: UIImage? = nil
     private var scanTimer: Timer?
+    
+    //Finding the image it is looking for
+    private var imageOrientation: CGImagePropertyOrientation {
+        switch UIDevice.current.orientation {
+        case .portrait: return .right
+        case .landscapeRight: return .down
+        case .portraitUpsideDown: return .left
+        case .unknown: fallthrough
+        case .faceUp: fallthrough
+        case .faceDown: fallthrough
+        case .landscapeLeft: return .up
+        }
+    }
 
     
     override func viewDidLoad() {
@@ -40,38 +52,47 @@ class MovingViewController: UIViewController {
     
     @objc private func scanningFaces() {
         
-        //remove the test views and empty the array that was keeping a reference to them
-        _ = scannedFaceViews.map { $0.removeFromSuperview() }
-        scannedFaceViews.removeAll()
         
+        guard let capturedImage = contentView.session.currentFrame?.capturedImage else { return }
+        let image = CIImage.init(cvPixelBuffer: capturedImage)
+
 //        guard let capturedImage = contentView.session.currentFrame?.capturedImage else { return }
         let detectFaceRequest = VNDetectFaceRectanglesRequest { (request, error) in
-            print("3")
             DispatchQueue.main.async {
-                if ((request.results as? [VNFaceObservation]) != nil) {
-                    print("Found a face")
-                    self.screenShot()
-                    
-                    if self.theImage != nil {
+                if let faces = request.results as? [VNFaceObservation] {
+                    for face in faces {
+                        let faceView = UIView(frame: self.faceFrame(from: face.boundingBox))
+                        //Calling NEC
+                        print("Face Found")
                         self.detection()
-                    } else {
-                        print("restart")
+                        
+                        
                     }
                 }
             }
+        }
+        
+        DispatchQueue.global().async {
+            try? VNImageRequestHandler(ciImage: image, orientation: self.imageOrientation).perform([detectFaceRequest])
         }
        
     }
     
     // Taking Screenshot of screen to process through NEC Detection API
-    func screenShot() {
-        UIGraphicsBeginImageContext(view.frame.size)
-        view.layer.render(in: UIGraphicsGetCurrentContext()!)
-        theImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-    }
+//    func screenShot() {
+//        UIGraphicsBeginImageContext(view.frame.size)
+//        view.layer.render(in: UIGraphicsGetCurrentContext()!)
+//        theImage = UIGraphicsGetImageFromCurrentImageContext()
+//        var bitImage: NSData = UIImageJPEGRepresentation(theImage!, 1.0)?.base64EncodedData() as! NSData
+//        UIGraphicsEndImageContext()
+//    }
     
     func detection () {
+        UIGraphicsBeginImageContext(view.frame.size)
+        view.layer.render(in: UIGraphicsGetCurrentContext()!)
+        var theImage = UIGraphicsGetImageFromCurrentImageContext()
+        let bitImage: NSString = UIImageJPEGRepresentation(theImage!, 1.0)?.base64EncodedString(options: []) as! NSString
+        UIGraphicsEndImageContext()
         // create post request
         let url = URL(string: "http://13.231.67.97/developerweek/api/v1.0/tenants/nec/if102008/root/json")!
         var request = URLRequest(url: url)
@@ -82,30 +103,45 @@ class MovingViewController: UIViewController {
                 "reqDatetime": "{0:%Y/%m/%d %H:%M:%S}",
                 "deviceID": 12345],
             "reqData": [
-                "image": theImage,
-                "detectFaceLimit": 8]
+                "image": bitImage,
+                "detectFaceLimit": 4]
         ]
-        
         let jsonData = try? JSONSerialization.data(withJSONObject: requestParameters)
         request.httpBody = jsonData
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return
+                
             }
             let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
             if let responseJSON = responseJSON as? [String: Any] {
-                var number_of_faces = responseJSON["detectFaceLimit"]
+                print(responseJSON["resData"])
+                if responseJSON["resData"] == nil {
+                    
+                    
+                }
+                
+                }
                 
             }
-        }
+        
         
         task.resume()
         
     }
 
-    
+    private func faceFrame(from boundingBox: CGRect) -> CGRect {
+        
+        let origin = CGPoint(x: boundingBox.minX * contentView.bounds.width, y: (1 - boundingBox.maxY) * contentView.bounds.height)
+        let size = CGSize(width: boundingBox.width * contentView.bounds.width, height: boundingBox.height * contentView.bounds.height)
+        
+        return CGRect(origin: origin, size: size)
+    }
 
+  
+    
+    
     /*
     // MARK: - Navigation
 
