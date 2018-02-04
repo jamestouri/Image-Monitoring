@@ -39,6 +39,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Saved Faces"/>
                                 <connections>
+                                    <action selector="uploadSelfie:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2cp-kX-8sn"/>
                                     <segue destination="VDX-5I-G2O" kind="show" id="Gd2-yG-tit"/>
                                 </connections>
                             </button>
