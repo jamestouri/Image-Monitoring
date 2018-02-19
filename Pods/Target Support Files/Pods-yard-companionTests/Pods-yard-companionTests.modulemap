@@ -1,0 +1,6 @@
+framework module Pods_yard_companionTests {
+  umbrella header "Pods-yard-companionTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
