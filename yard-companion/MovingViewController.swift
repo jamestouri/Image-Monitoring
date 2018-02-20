@@ -16,7 +16,18 @@ class MovingViewController: UIViewController {
     @IBOutlet weak var contentView: ARSCNView!
     private var scanTimer: Timer?
     
-  
+    //Finding the image it is looking for
+    private var imageOrientation: CGImagePropertyOrientation {
+        switch UIDevice.current.orientation {
+            case .portrait: return .right
+            case .landscapeRight: return .down
+            case .portraitUpsideDown: return .left
+            case .unknown: fallthrough
+            case .faceUp: fallthrough
+            case .faceDown: fallthrough
+            case .landscapeLeft: return .up
+            }
+      }
 
     
     override func viewDidLoad() {
@@ -41,6 +52,34 @@ class MovingViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    @objc private func scanningFaces() {
+        
+        
+        guard let capturedImage = contentView.session.currentFrame?.capturedImage else { return }
+        let image = CIImage.init(cvPixelBuffer: capturedImage)
+        
+        //        guard let capturedImage = contentView.session.currentFrame?.capturedImage else { return }
+        let detectFaceRequest = VNDetectFaceRectanglesRequest { (request, error) in
+            DispatchQueue.main.async {
+                if let faces = request.results as? [VNFaceObservation] {
+                    for face in faces {
+                        let faceView = UIView(frame: self.faceFrame(from: face.boundingBox))
+                        //Calling NEC
+                        print("Face Found")
+                        self.detection()
+                        
+                        
+                    }
+                }
+            }
+        }
+        
+        DispatchQueue.global().async {
+            try? VNImageRequestHandler(ciImage: image, orientation: self.imageOrientation).perform([detectFaceRequest])
+        }
+        
     }
     
 
@@ -92,7 +131,14 @@ class MovingViewController: UIViewController {
         
     }
 
-  
+    private func faceFrame(from boundingBox: CGRect) -> CGRect {
+        
+        let origin = CGPoint(x: boundingBox.minX * contentView.bounds.width, y: (1 - boundingBox.maxY) * contentView.bounds.height)
+        let size = CGSize(width: boundingBox.width * contentView.bounds.width, height: boundingBox.height * contentView.bounds.height)
+        
+        return CGRect(origin: origin, size: size)
+    }
+
     
 }
 
